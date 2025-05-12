@@ -1,116 +1,113 @@
+# 📧 Protokol & Alur Kerja Sistem Email
 
-### 1. Protokol mail (SMTP, POP3, IMAP, POP3S)
+## 1. Jenis Protokol Email: SMTP, POP3, IMAP, POP3S
 
-**SMTPh (Simple Mail Transfer Protocol)**
+### ✉️ SMTP (Simple Mail Transfer Protocol)
 
-- **Peran Utama :** Mengirim email dari client ke mail server, atau antar mail server.
-- **Port default:** 25 (umum), 587 (untuk TLS), 465 (untuk SSL)
-- **Arah komunikasi:** Dari pengirim ke server, atau antar server.
-- **Catatan:** SMTP tidak digunakan untuk mengambil/membaca email.
+- **Tujuan:** Mengirim email dari pengguna ke server, atau antar server.
+- **Port Umum:** 25 (biasa), 587 (TLS), 465 (SSL)
+- **Arah:** Outgoing (pengiriman)
+- **Catatan:** Tidak digunakan untuk membaca email.
 
-**POP3 (Post Office Protocol version 3)**
+### 📥 POP3 (Post Office Protocol v3)
 
-- **Fungsi:** Mengambil email dari server ke client.
-- **Port default:** 110 (tanpa enkripsi), 995 (untuk SSL/TLS)
-- **Catatan:** email diunduh ke perangkat pengguna sehingga dapat diakses tanpa koneksi internet setelah diunduh.
-- **Ciri khas:**
-  - Email diunduh ke perangkat dan biasanya dihapus dari server.
-  - Cocok jika hanya menggunakan satu perangkat untuk email.
+- **Tujuan:** Mengambil email dari server ke perangkat.
+- **Port:** 110 (non-enkripsi), 995 (SSL/TLS)
+- **Karakteristik:**
+  - Email diunduh ke perangkat lalu dihapus dari server.
+  - Ideal jika hanya menggunakan satu perangkat.
 
-**IMAP (Internet Message Access Protocol)**
+### 🌐 IMAP (Internet Message Access Protocol)
 
-- **Fungsi:** Mengakses dan mengelola email langsung di server secara real time.
-- **Port default:** 143 (tanpa enkripsi), 993 (TLS/SSL)
-- **Ciri khas:**
-  - Email tetap di server.
-  - Sinkronisasi penuh antar banyak peran
+- **Fungsi:** Akses email langsung dari server secara sinkron.
+- **Port:** 143 (non-enkripsi), 993 (TLS/SSL)
+- **Ciri-ciri:**
+  - Email tetap tersimpan di server.
+  - Sinkron di banyak perangkat.
 
-**POP3S (POP3 Secure)**
+### 🔐 POP3S (POP3 Secure)
 
-- **Fungsi:** POP3 dengan keamanan SSL/TLS.
-- **Port default:** 995
-- **Bedanya dengan POP3:** Data dienkripsi untuk keamanan selama transmisi.
+- **Fungsi:** Versi aman dari POP3 menggunakan SSL/TLS.
+- **Port:** 995
+- **Keunggulan:** Seluruh transmisi terenkripsi.
 
-## 2. informasi mail server dalam sebuah domain
+---
 
-informasi mail server dalam sebuah domain disebut **MX Record** (Mail Exchange Record). Ini adalah bagian dari DNS (Domain Name System) yang menunjukkan server mana yang menangani email untuk domain tersebut.
+## 2. Apa Itu MX Record?
 
-**MX Record (Mail Exchange Record)** adalah jenis catatan dalam sistem DNS (Domain Name System) yang menunjukkan **server mana yang bertanggung jawab untuk menerima email** yang dikirim ke alamat email di domain tertentu.
+MX Record (Mail Exchange Record) adalah entri DNS yang menunjukkan **server mana** yang bertanggung jawab menerima email untuk sebuah domain.
 
-## Fungsi Utama MX Record
+### 🎯 Fungsi Utama
 
-- Mengarahkan email yang masuk ke **mail server** yang benar.
-- Bisa mendukung **beberapa server email** untuk **backup/failover**.
-- Memberikan **prioritas** untuk menentukan server mana yang dicoba lebih dulu.
+- Mengarahkan email ke mail server yang tepat.
+- Bisa mendukung beberapa server untuk cadangan (failover).
+- Mengatur urutan prioritas server penerima.
 
-## Catatan Penting
+### ⚠️ Catatan Penting
 
-- MX record **harus menunjuk ke nama host (bukan langsung ke IP)**.
-- Nama host tersebut **harus memiliki A record atau AAAA record** (agar bisa diubah jadi IP).
-- MX record diperlukan agar email dari luar bisa dikirim ke domain kamu.
+- MX Record **harus menunjuk ke nama host**, bukan IP langsung.
+- Hostname tersebut **wajib memiliki A record/AAAA record**.
+- Tanpa MX Record, domain tidak bisa menerima email eksternal.
 
-## 3. Penjelasan gambar
-![image](https://github.com/user-attachments/assets/f27c3720-2546-49f0-845d-ba782d937d98)
+---
 
+## 3. Ilustrasi Alur Pengiriman Email
 
-menggambarkan dua pengguna email (User A dan User B) yang berkomunikasi melalui email via internet. Email dikirim dari sisi klien User A, diproses melalui berbagai komponen, lalu dikirimkan ke server User B dan diterima oleh User B. Diagram ini mencerminkan cara kerja protokol seperti SMTP, POP3, dan IMAP di balik layar.
+![Alur Email](https://github.com/user-attachments/assets/f27c3720-2546-49f0-845d-ba782d937d98)
 
-## 💡 Komponen-Komponen Utama
+Diagram menunjukkan komunikasi email dari User A ke User B via internet. Protokol seperti SMTP, POP3, dan IMAP bekerja di balik layar untuk mengirim dan mengambil email.
 
-### 1\. **UA (User Agent)**
+---
 
-- Ini adalah aplikasi yang digunakan pengguna untuk menulis, mengirim, dan membaca email. Contohnya: Outlook, Thunderbird, Gmail (web).
-- Di sisi User A: UA digunakan untuk membuat dan mengirim email.
-- Di sisi User B: UA digunakan untuk menerima dan membaca email.
+## 🧩 Komponen Penting dalam Sistem Email
 
-### 2\. **Spool**
+### 1. **User Agent (UA)**
+- Aplikasi untuk menulis dan membaca email, misalnya Gmail, Thunderbird, Outlook.
+- User A mengirim email melalui UA, User B membacanya lewat UA.
 
-- Tempat penyimpanan sementara untuk email yang akan dikirim (outgoing queue).
-- Ketika User A menulis email dan menekan “Send”, email itu akan disimpan di spool dulu sebelum dikirim oleh MTA.
+### 2. **Spool**
+- Buffer atau antrean sementara untuk email yang sedang dikirim.
+- Email dikirim ke spool saat tombol “Send” ditekan.
 
-### 3\. **Mailboxes**
+### 3. **Mailboxes**
+- Lokasi tempat email disimpan setelah diterima.
+- UA mengambil email dari sini.
 
-- Tempat email yang diterima (inbox) disimpan.
-- User B membaca email dari mailbox ini melalui UA.
+### 4. **Alias Expander**
+- Menangani alamat alias seperti `support@domain.com`.
+- Bisa mengarahkan ke banyak alamat berdasarkan data dari Database.
 
-### 4\. **Alias Expander (Alias exp.)**
+### 5. **Database**
+- Berisi data pengguna, alias, dan aturan pengiriman email.
+- Dihubungkan ke alias expander.
 
-- Bertugas untuk memetakan **alias email** (misalnya: <support@domain.com>) ke alamat asli atau grup penerima.
-- Bisa menggunakan informasi dari **Database** untuk melakukan ekspansi (misalnya ke banyak penerima jika itu mailing list).
+### 6. **MTA (Mail Transfer Agent)**
+- Mesin pengirim antar-server menggunakan protokol SMTP.
+- Bertugas menerima email dari spool dan mengirim ke MTA penerima.
 
-### 5\. **Database**
+### 7. **Internet**
+- Jalur antar-server email antar domain berbeda.
+- Menggunakan SMTP sebagai protokol transport utama.
 
-- Menyimpan informasi pengguna, konfigurasi email, alias, filter, dsb.
-- Digunakan oleh alias expander untuk memutuskan ke mana email sebenarnya harus dikirim.
+---
 
-### 6\. **MTA (Mail Transfer Agent)**
+## 🔄 Urutan Proses Email (User A ➡️ User B)
 
-- Komponen utama yang bertugas **mengirimkan email antar server** menggunakan protokol **SMTP**.
-- Di sisi pengirim:
-  - MTA pertama menangani pengambilan dari spool.
-  - MTA kedua bertugas menghubungkan ke internet dan mengirim email ke MTA penerima.
-- Di sisi penerima:
-  - MTA menerima email dari internet dan menyerahkannya ke mailbox penerima.
+1. User A menulis email di aplikasi UA.
+2. Email dikirim ke spool.
+3. Alias expander mengecek apakah alamat penerima adalah alias.
+4. Email dikirim ke MTA pengirim.
+5. MTA menghubungi MTA penerima lewat internet.
+6. MTA penerima menerima email.
+7. Alias expander di server penerima mengecek alias tujuan.
+8. Email disimpan ke mailbox User B.
+9. UA milik User B mengakses dan membaca email dari mailbox.
 
-### 7\. **Internet**
+---
 
-- Jalur komunikasi antar MTA dari domain berbeda.
-- SMTP digunakan di sini untuk mentransfer email dari server User A ke server User B.
+## 📌 Catatan Tambahan
 
-## 📬 **Alur Pengiriman Email dari User A ke User B:**
+- SMTP bekerja untuk pengiriman antar server.
+- POP3/IMAP digunakan oleh client untuk mengambil email dari server.
+- Proses sisi kiri diagram = pengiriman, sisi kanan = penerimaan.
 
-1. **User A** menulis email di UA (user agent).
-2. Email dikirim ke **spool** (outbox lokal) untuk sementara.
-3. **Alias expander** mengecek apakah alamat tujuan adalah alias, lalu menggunakan **Database** untuk memetakan alamat ke tujuan sebenarnya.
-4. Email dikirim ke **MTA (client side)** untuk diproses.
-5. MTA ini mengirim email ke MTA berikutnya (server side) yang terhubung ke internet.
-6. Melalui **internet**, email dikirim ke **MTA di domain User B**.
-7. MTA server User B menerima email, melewatkannya ke **alias expander** untuk mengecek alias tujuan (jika ada).
-8. Alias expander menyimpan email di **mailbox** penerima.
-9. **User B** menggunakan UA-nya untuk mengambil dan membaca email dari mailbox.
-
-## 📘 Catatan Tambahan
-
-- **SMTP** digunakan antar MTA untuk pengiriman email.
-- **POP3/IMAP** akan digunakan oleh UA milik User B untuk mengambil email dari mailbox (tidak digambarkan langsung di sini, tapi UA dan Mailboxes-nya mengimplikasikan ini).
-- Komponen di kiri (User A) mencerminkan **pengiriman email**, sedangkan komponen di kanan (User B) mencerminkan **penerimaan email**.
